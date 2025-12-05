@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>川菜大师 | Chuan Cuisine Master</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;500;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'chuan-red': '#8B0000',
+                        'chuan-red-light': '#C41E3A',
+                        'chuan-gold': '#D4AF37',
+                        'chuan-dark': '#1A1A1A',
+                        'paper': '#Fdfbf7'
+                    },
+                    fontFamily: {
+                        'serif': ['"Noto Serif SC"', 'serif'],
+                        'sans': ['"Noto Sans SC"', 'sans-serif'],
+                        'calligraphy': ['"Ma Shan Zheng"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #Fdfbf7;
+            color: #1A1A1A;
+        }
+        .glass-nav {
+            background: rgba(253, 251, 247, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        [v-cloak] { display: none; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8B0000;
+            border-radius: 4px;
+        }
+        
+        .floating-item {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div id="app" v-cloak class="min-h-screen flex flex-col">
+        
+        <!-- Navigation -->
+        <nav class="glass-nav fixed w-full z-50 border-b border-chuan-gold/20 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-20 items-center">
+                    <div class="flex items-center cursor-pointer" @click="goHome">
+                        <span class="text-3xl text-chuan-red font-calligraphy mr-2">川</span>
+                        <span class="text-xl font-serif font-bold tracking-widest text-chuan-dark">川菜大师</span>
+                    </div>
+                    <div class="hidden md:flex space-x-8 items-center">
+                        <a href="#" @click.prevent="goHome" :class="currentView === 'home' ? 'text-chuan-red font-bold' : 'text-gray-600 hover:text-chuan-red'" class="transition-colors">首页</a>
+                        <a href="#" class="text-gray-600 hover:text-chuan-red transition-colors">教学</a>
+                        <a href="#" class="text-gray-600 hover:text-chuan-red transition-colors">创意</a>
+                        <a href="#" class="text-gray-600 hover:text-chuan-red transition-colors">关于</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input v-model="searchQuery" type="text" placeholder="搜菜谱..." class="bg-gray-100 rounded-full px-4 py-1 focus:outline-none focus:ring-1 focus:ring-chuan-red w-32 focus:w-48 transition-all duration-300 text-sm">
+                        </div>
+                        <button class="text-chuan-dark hover:text-chuan-red relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span v-if="favorites && favorites.length > 0" class="absolute -top-1 -right-1 bg-chuan-red text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">{{ favorites.length }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow pt-20">
+            
+            <!-- HOME VIEW -->
+            <div v-if="currentView === 'home'">
+                <!-- Hero Section -->
+                <header class="relative bg-chuan-dark text-white overflow-hidden h-[600px] flex items-center justify-center">
+                    <!-- Background decoration -->
+                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 30px 30px;"></div>
+                    
+                    <!-- Floating Elements -->
+                    <div class="floating-item text-6xl top-20 left-20 opacity-50">🌶️</div>
+                    <div class="floating-item text-5xl bottom-32 right-32 opacity-50">🔥</div>
+                    <div class="floating-item text-4xl top-40 right-20 opacity-40">🌿</div>
+
+                    <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                        <h2 class="hero-text text-2xl md:text-3xl text-chuan-gold font-serif mb-4 tracking-[0.5em]">传承千年味</h2>
+                        <h1 class="hero-text text-5xl md:text-7xl font-calligraphy text-white mb-8 drop-shadow-lg">一菜一格，百菜百味</h1>
+                        <p class="hero-text text-gray-300 mb-10 max-w-2xl mx-auto text-lg leading-relaxed font-serif">
+                            探索正宗川菜的烹饪艺术，从选材到火候，带您领略东方美食的麻辣鲜香。
+                        </p>
+                        <div class="hero-text flex justify-center gap-4">
+                            <button @click="viewRecipe(recipes[0])" class="bg-chuan-red hover:bg-chuan-red-light text-white px-8 py-3 rounded-full font-serif tracking-wider transition-all transform hover:scale-105 shadow-lg border border-transparent">
+                                开始学习
+                            </button>
+                            <button class="bg-transparent border border-chuan-gold text-chuan-gold hover:bg-chuan-gold hover:text-chuan-dark px-8 py-3 rounded-full font-serif tracking-wider transition-all">
+                                探索文化
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Featured Recipes Section -->
+                <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div class="flex items-center justify-between mb-12">
+                        <h3 class="text-3xl font-serif font-bold text-chuan-dark border-l-4 border-chuan-red pl-4">本周精选</h3>
+                        <a href="#" class="text-chuan-red hover:text-chuan-dark font-serif flex items-center">查看全部 &rarr;</a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div v-for="recipe in filteredRecipes" :key="recipe.id" 
+                             class="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-100"
+                             @click="viewRecipe(recipe)">
+                            <div class="relative h-64 overflow-hidden">
+                                <img :src="recipe.image" :alt="recipe.title" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-chuan-red uppercase tracking-wide">
+                                    {{ recipe.difficulty }}
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="text-xl font-serif font-bold text-chuan-dark group-hover:text-chuan-red transition-colors">{{ recipe.title }}</h4>
+                                    <button @click.stop="toggleFavorite(recipe.id)" class="text-gray-400 hover:text-chuan-red focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" :fill="isFavorite(recipe.id) ? 'currentColor' : 'none'" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-4 line-clamp-2">{{ recipe.description }}</p>
+                                <div class="flex items-center justify-between text-xs text-gray-400">
+                                    <span class="flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> {{ recipe.time }}</span>
+                                    <span class="flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> {{ recipe.calories }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Creative Section -->
+                <section class="bg-chuan-dark text-white py-16 overflow-hidden">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="mb-12 text-center">
+                            <h3 class="text-3xl font-serif font-bold text-chuan-gold mb-4">川味·新潮</h3>
+                            <p class="text-gray-400 max-w-2xl mx-auto">当传统遇见现代，辣椒也能玩出新花样</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div v-for="item in creativeContent" :key="item.id" class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer">
+                                <img :src="item.image" :alt="item.title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-70 group-hover:opacity-100">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                                    <span class="text-xs font-bold text-chuan-red bg-white/10 backdrop-blur w-fit px-2 py-1 rounded mb-2">{{ item.type === 'game' ? '互动游戏' : '创意插画' }}</span>
+                                    <h4 class="text-xl font-bold mb-1">{{ item.title }}</h4>
+                                    <p class="text-sm text-gray-300">{{ item.desc }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RECIPE DETAIL VIEW -->
+            <div v-if="currentView === 'recipe-detail' && selectedRecipe" class="bg-white min-h-screen pb-20">
+                
+                <!-- Detail Hero -->
+                <div class="relative h-[50vh] w-full overflow-hidden">
+                    <img :src="selectedRecipe.image" class="w-full h-full object-cover fixed-bg">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-16 text-white recipe-header">
+                        <button @click="goHome" class="mb-6 text-white/80 hover:text-white flex items-center gap-2 group">
+                            <span class="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition">&larr;</span> 返回首页
+                        </button>
+                        <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4">{{ selectedRecipe.title }}</h1>
+                        <div class="flex flex-wrap gap-4 text-sm md:text-base font-light">
+                            <span class="bg-chuan-red px-3 py-1 rounded">难度: {{ selectedRecipe.difficulty }}</span>
+                            <span class="bg-white/20 backdrop-blur px-3 py-1 rounded">时间: {{ selectedRecipe.time }}</span>
+                            <span class="bg-white/20 backdrop-blur px-3 py-1 rounded">热量: {{ selectedRecipe.calories }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+                    <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+                        
+                        <!-- Intro -->
+                        <div class="mb-12 text-center max-w-2xl mx-auto">
+                            <p class="text-xl text-gray-600 font-serif leading-relaxed italic">
+                                "{{ selectedRecipe.description }}"
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                            <!-- Ingredients Sidebar -->
+                            <div class="lg:col-span-1">
+                                <div class="bg-paper p-6 rounded-xl border border-stone-200 sticky top-24">
+                                    <h3 class="text-2xl font-serif font-bold mb-6 text-chuan-dark border-b pb-2">食材清单</h3>
+                                    <ul class="space-y-3">
+                                        <li v-for="(ing, idx) in selectedRecipe.ingredients" :key="idx" class="flex justify-between items-center text-sm border-b border-stone-100 pb-2 last:border-0">
+                                            <span class="font-bold text-gray-700">{{ ing.name }}</span>
+                                            <span class="text-gray-500">{{ ing.amount }}</span>
+                                        </li>
+                                    </ul>
+                                    <div class="mt-6 pt-6 border-t border-stone-200">
+                                        <button class="w-full bg-chuan-dark text-chuan-gold py-3 rounded-lg font-serif hover:bg-black transition">
+                                            一键加入购物清单
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Steps Main -->
+                            <div class="lg:col-span-2 steps-container">
+                                <h3 class="text-2xl font-serif font-bold mb-8 text-chuan-dark">烹饪步骤</h3>
+                                <div class="space-y-12">
+                                    <div v-for="(step, idx) in selectedRecipe.steps" :key="idx" class="step-card flex gap-6">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-12 h-12 rounded-full bg-chuan-red text-white flex items-center justify-center text-xl font-bold font-serif shadow-lg">
+                                                {{ idx + 1 }}
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow pt-2">
+                                            <h4 class="text-xl font-bold mb-3 text-gray-800">{{ step.title }}</h4>
+                                            <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ step.content }}</p>
+                                            <!-- Step Image -->
+                                            <div v-if="step.image" class="mt-4 rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+                                                <img :src="step.image" :alt="step.title" class="w-full h-auto object-cover max-h-64">
+                                            </div>
+                                            <div v-else class="mt-4 h-24 bg-gray-50 rounded-lg flex items-center justify-center text-gray-300 text-xs border border-dashed border-gray-200">
+                                                暂无图片
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Interactive Section -->
+                                <div class="mt-16 pt-10 border-t border-gray-200">
+                                    <h3 class="text-2xl font-serif font-bold mb-6">厨友评论</h3>
+                                    <div class="bg-gray-50 p-6 rounded-xl mb-6">
+                                        <textarea placeholder="分享你的烹饪心得..." class="w-full bg-white border border-gray-200 rounded-lg p-4 focus:outline-none focus:border-chuan-red transition resize-none h-24"></textarea>
+                                        <div class="mt-2 flex justify-end">
+                                            <button class="bg-chuan-red text-white px-6 py-2 rounded-lg hover:bg-chuan-red-light transition">发布评论</button>
+                                        </div>
+                                    </div>
+                                    <!-- Mock Comments -->
+                                    <div class="space-y-6">
+                                        <div class="flex gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-gray-300"></div>
+                                            <div>
+                                                <div class="flex items-center gap-2">
+                                                    <span class="font-bold text-sm">辣妹子</span>
+                                                    <span class="text-xs text-gray-400">2小时前</span>
+                                                </div>
+                                                <p class="text-gray-600 text-sm mt-1">按照这个方子做了一次，刀口辣椒真的是灵魂！太香了！</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-chuan-dark text-white py-12 border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="text-2xl font-calligraphy text-chuan-red mb-4 block">川菜大师</span>
+                    <p class="text-gray-400 text-sm max-w-xs">致力于弘扬中华美食文化，让世界爱上川菜。</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-serif font-bold text-chuan-gold mb-4">关于我们</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">品牌故事</a></li>
+                        <li><a href="#" class="hover:text-white">联系合作</a></li>
+                        <li><a href="#" class="hover:text-white">加入我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-serif font-bold text-chuan-gold mb-4">关注我们</h4>
+                    <div class="flex space-x-4">
+                        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-chuan-red cursor-pointer transition">wx</div>
+                        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-chuan-red cursor-pointer transition">wb</div>
+                        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-chuan-red cursor-pointer transition">dy</div>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-white/10 text-center text-xs text-gray-500">
+                &copy; 2023 川菜大师 Chuan Cuisine Master. All rights reserved. 蜀ICP备88888888号
+            </div>
+        </footer>
+    </div>
+
+    <!-- App Logic -->
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
