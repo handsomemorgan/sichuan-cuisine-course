@@ -3,3 +3,6 @@
 __pycache__/
 *.docx
 .~*
+web/.DS_Store
+web/assets/.DS_Store
+web/assets/images/.DS_Store
