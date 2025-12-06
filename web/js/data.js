@@ -60,24 +60,47 @@ export const recipes = [
     },
     {
         id: 2,
-        title: "麻婆豆腐",
-        description: "麻、辣、烫、香、酥、嫩、鲜、活，八字箴言。",
-        difficulty: "家常",
+        title: "非遗经典 · 麻婆豆腐",
+        description: "麻、辣、烫、香、酥、嫩、鲜、活，八字箴言的完美演绎。",
+        difficulty: "大师",
         time: "30分钟",
-        calories: "300 kcal",
+        calories: "350 kcal",
         image: "./assets/images/mapo-main.jpg",
-        tags: ["麻辣", "豆腐", "下饭"],
-        ingredients: [],
+        tags: ["麻辣", "豆腐", "非遗"],
+        ingredients: [
+            { name: "嫩豆腐", amount: "一块 (约400g)" },
+            { name: "牛肉末", amount: "100g (酥香关键)" },
+            { name: "青蒜苗", amount: "2根 (切马耳朵段)" },
+            { name: "郫县豆瓣酱", amount: "一大勺 (剁细)" },
+            { name: "豆豉", amount: "一小撮 (切碎)" },
+            { name: "辣椒面", amount: "适量 (出色)" },
+            { name: "花椒面", amount: "适量 (出锅撒)" },
+            { name: "姜末/蒜末", amount: "各一勺" },
+            { name: "水淀粉", amount: "分三次勾芡" },
+            { name: "高汤/水", amount: "一碗" },
+            { name: "生抽/老抽", amount: "少许" },
+            { name: "白糖", amount: "少许" }
+        ],
         steps: [
             {
-                title: "炒制底料",
-                content: "锅中放油，下入牛肉末炒酥，加入豆瓣酱炒出红油。",
-                image: "./assets/images/step-fry.jpg"
+                title: "豆腐预处理",
+                content: "豆腐切成2厘米见方的方块。锅中烧水，加少许盐（去豆腥，紧致豆腐），水开后下豆腐焯水1分钟，捞出浸泡在温水中备用（防止粘连）。",
+                image: "./assets/images/mapo-step-1.jpg"
             },
             {
-                title: "炖煮豆腐",
-                content: "加入高汤或水，放入豆腐块，中小火慢炖入味。",
-                image: "./assets/images/step-tofu.jpg"
+                title: "炒制肉臊与底料",
+                content: "起锅烧油（菜籽油+猪油混合更香），下牛肉末中小火煸炒，直至肉末酥香吐油（这是'酥'的关键）。下入豆瓣酱、豆豉、姜蒜末、辣椒面，炒出红油和香味。",
+                image: "./assets/images/mapo-step-2.jpg"
+            },
+            {
+                title: "烧烩入味",
+                content: "加入高汤或清水，煮沸后调入生抽、少许白糖（提鲜）。轻轻滑入豆腐，转中小火烧制3-5分钟，让豆腐吸饱汤汁。注意全程只能用锅铲背推，或者晃动锅子，不可乱搅。",
+                image: "./assets/images/mapo-step-3.jpg"
+            },
+            {
+                title: "三次勾芡与成菜",
+                content: "最为关键的'三芡'：第一次勾稀芡，让汤汁初步浓稠；第二次勾芡，收束水分；第三次勾芡，让芡汁紧紧包裹豆腐（亮油亮芡）。撒上一半蒜苗，推匀关火。装盘后撒上剩下的蒜苗和灵魂花椒面。",
+                image: "./assets/images/mapo-step-4.jpg"
             }
         ]
     }
