@@ -1,7 +1,7 @@
 import { createApp, ref, computed, onMounted, nextTick } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-import { recipes, creativeContent } from './data.js';
-import { initGame } from './game.js';
-import { initIllustration } from './illustration.js';
+import { recipes, creativeContent } from './data.js?v=2';
+import { initGame } from './game.js?v=2';
+import { initIllustration } from './illustration.js?v=2';
 
 const app = createApp({
     setup() {
