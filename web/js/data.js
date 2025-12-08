@@ -38,7 +38,7 @@ export const recipes = [
             },
             {
                 title: "灵魂制作——刀口辣椒",
-                content: "50克干辣椒，去根，辣椒籽要留着；12克花椒粒，越想越好；微油、开小火，慢慢煸出香味。千万不能炒糊炒黑，要不然会发苦；放凉一点，用刀切碎，不用太细。",
+                content: "50克干辣椒，去根，辣椒籽要留着；12克花椒粒，越香越好；微油、开小火，慢慢煸出香味。千万不能炒糊炒黑，要不然会发苦；放凉一点，用刀切碎，不用太细。",
                 image: "./assets/images/custom-2-step-3.jpg"
             },
             {
@@ -68,39 +68,127 @@ export const recipes = [
         image: "./assets/images/mapo-main.jpg",
         tags: ["麻辣", "豆腐", "非遗"],
         ingredients: [
-            { name: "嫩豆腐", amount: "一块 (约400g)" },
-            { name: "牛肉末", amount: "100g (酥香关键)" },
-            { name: "青蒜苗", amount: "2根 (切马耳朵段)" },
-            { name: "郫县豆瓣酱", amount: "一大勺 (剁细)" },
-            { name: "豆豉", amount: "一小撮 (切碎)" },
-            { name: "辣椒面", amount: "适量 (出色)" },
-            { name: "花椒面", amount: "适量 (出锅撒)" },
-            { name: "姜末/蒜末", amount: "各一勺" },
-            { name: "水淀粉", amount: "分三次勾芡" },
-            { name: "高汤/水", amount: "一碗" },
-            { name: "生抽/老抽", amount: "少许" },
-            { name: "白糖", amount: "少许" }
+            { name: "豆腐", amount: "一块 (400g)" },
+            { name: "牛肉末", amount: "50g" },
+            { name: "豆瓣酱", amount: "30g" },
+            { name: "豆豉", amount: "20g" },
+            { name: "盐", amount: "2g" },
+            { name: "鸡粉", amount: "2g" },
+            { name: "酱油", amount: "15g" },
+            { name: "黄酒", amount: "10g" },
+            { name: "大蒜末", amount: "20g" },
+            { name: "肉汤", amount: "300ml" },
+            { name: "水淀粉", amount: "适量" },
+            { name: "花生油", amount: "30g" },
+            { name: "青蒜末", amount: "30g" },
+            { name: "花椒面", amount: "1g" },
+            { name: "香菜末", amount: "5g" }
         ],
         steps: [
             {
-                title: "豆腐预处理",
-                content: "豆腐切成2厘米见方的方块。锅中烧水，加少许盐（去豆腥，紧致豆腐），水开后下豆腐焯水1分钟，捞出浸泡在温水中备用（防止粘连）。",
-                image: "./assets/images/mapo-step-1.jpg"
+                title: "备料",
+                content: "主料；豆腐一块400克、牛肉末50克；调料：豆瓣酱30克、豆豉20克、盐2克、鸡粉2克、酱油15克、黄酒10克、大蒜末20克、肉汤300ml、水淀粉适量、花生油30克；配料：青蒜末30克、花椒面1克、香菜末5克。",
+                image: "./assets/images/mapo-real-step-1.jpg"
             },
             {
-                title: "炒制肉臊与底料",
-                content: "起锅烧油（菜籽油+猪油混合更香），下牛肉末中小火煸炒，直至肉末酥香吐油（这是'酥'的关键）。下入豆瓣酱、豆豉、姜蒜末、辣椒面，炒出红油和香味。",
-                image: "./assets/images/mapo-step-2.jpg"
+                title: "改刀",
+                content: "先把豆腐切成2厘米见方的丁。",
+                image: "./assets/images/mapo-real-step-2.jpg"
             },
             {
-                title: "烧烩入味",
-                content: "加入高汤或清水，煮沸后调入生抽、少许白糖（提鲜）。轻轻滑入豆腐，转中小火烧制3-5分钟，让豆腐吸饱汤汁。注意全程只能用锅铲背推，或者晃动锅子，不可乱搅。",
-                image: "./assets/images/mapo-step-3.jpg"
+                title: "加盐",
+                content: "在清水里放少许盐。",
+                image: "./assets/images/mapo-real-step-3.jpg"
             },
             {
-                title: "三次勾芡与成菜",
-                content: "最为关键的'三芡'：第一次勾稀芡，让汤汁初步浓稠；第二次勾芡，收束水分；第三次勾芡，让芡汁紧紧包裹豆腐（亮油亮芡）。撒上一半蒜苗，推匀关火。装盘后撒上剩下的蒜苗和灵魂花椒面。",
-                image: "./assets/images/mapo-step-4.jpg"
+                title: "焯水准备",
+                content: "把切好的豆腐在水中。",
+                image: "./assets/images/mapo-real-step-4.jpg"
+            },
+            {
+                title: "浸泡",
+                content: "浸泡15分钟。",
+                image: "./assets/images/mapo-real-step-5.jpg"
+            },
+            {
+                title: "沥水",
+                content: "然后捞出备用。",
+                image: "./assets/images/mapo-real-step-6.jpg"
+            },
+            {
+                title: "炒肉末",
+                content: "炒勺上火烧热，注入适量花生油便炒肉末。",
+                image: "./assets/images/mapo-real-step-7.jpg"
+            },
+            {
+                title: "下豆瓣酱",
+                content: "肉末变色后下入郫县豆瓣酱煸炒",
+                image: "./assets/images/mapo-real-step-8.jpg"
+            },
+            {
+                title: "下豆豉",
+                content: "煸炒出香味后下入豆豉煸炒",
+                image: "./assets/images/mapo-real-step-9.jpg"
+            },
+            {
+                title: "下蒜末",
+                content: "把豆豉煸炒出香味后，下入蒜末煸炒。",
+                image: "./assets/images/mapo-real-step-10.jpg"
+            },
+            {
+                title: "烹酒",
+                content: "然后烹入黄酒炒匀。",
+                image: "./assets/images/mapo-real-step-11.jpg"
+            },
+            {
+                title: "加汤",
+                content: "炒香以上材料后倒入肉汤煮开。",
+                image: "./assets/images/mapo-real-step-12.jpg"
+            },
+            {
+                title: "调味",
+                content: "然后放入适量的酱油。",
+                image: "./assets/images/mapo-real-step-13.jpg"
+            },
+            {
+                title: "加盐",
+                content: "用盐调味。",
+                image: "./assets/images/mapo-real-step-14.jpg"
+            },
+            {
+                title: "下豆腐",
+                content: "然后下入豆腐煮开。",
+                image: "./assets/images/mapo-real-step-15.jpg"
+            },
+            {
+                title: "煮制",
+                content: "豆腐煮大约3-5分钟。",
+                image: "./assets/images/mapo-real-step-16.jpg"
+            },
+            {
+                title: "提鲜",
+                content: "然后放入少许鸡粉提鲜。",
+                image: "./assets/images/mapo-real-step-17.jpg"
+            },
+            {
+                title: "勾芡",
+                content: "用水淀粉勾芡。",
+                image: "./assets/images/mapo-real-step-18.jpg"
+            },
+            {
+                title: "晃锅",
+                content: "此时要边摇锅边用手勺推动锅底，使豆腐不至糊锅，当淀粉彻底糊化后便可出锅码盘。",
+                image: "./assets/images/mapo-real-step-19.jpg"
+            },
+            {
+                title: "撒花椒面",
+                content: "装盘以后趁热均匀的撒上一层花椒面。",
+                image: "./assets/images/mapo-real-step-20.jpg"
+            },
+            {
+                title: "点缀",
+                content: "然后，撒上青蒜末和少许香菜末，假如不喜香菜可不放。此菜至此便告全部操作完成。",
+                image: "./assets/images/mapo-real-step-21.jpg"
             }
         ]
     }
@@ -108,17 +196,17 @@ export const recipes = [
 
 export const creativeContent = [
     {
-        id: 1,
-        title: "如果川菜是超级英雄",
+        id: 'illustration',
+        title: "AI 创意工坊",
         type: "illustration",
         image: "./assets/images/shuizhu-main.jpg",
-        desc: "火锅侠 vs 串串怪"
+        desc: "生成你的专属川菜抽象画作 & 探索川菜历史漫画"
     },
     {
-        id: 2,
+        id: 'game',
         title: "辣椒大冒险",
         type: "game",
         image: "./assets/images/mapo-main.jpg",
-        desc: "帮助小辣椒躲避牛奶的追击！"
+        desc: "PVE 攻防战：保卫火锅底料！"
     }
 ];

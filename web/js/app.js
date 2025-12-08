@@ -1,5 +1,7 @@
 import { createApp, ref, computed, onMounted, nextTick } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 import { recipes, creativeContent } from './data.js';
+import { initGame } from './game.js';
+import { initIllustration } from './illustration.js';
 
 const app = createApp({
     setup() {
@@ -7,6 +9,9 @@ const app = createApp({
         const selectedRecipe = ref(null);
         const searchQuery = ref('');
         const favorites = ref([]);
+        const comments = ref([]);
+        const newCommentText = ref('');
+        const isSubmittingComment = ref(false);
 
         // Load favorites from local storage
         onMounted(() => {
@@ -46,12 +51,70 @@ const app = createApp({
 
         const isFavorite = (recipeId) => favorites.value.includes(recipeId);
 
+        const fetchComments = async (recipeId) => {
+            try {
+                const response = await fetch(`/api/comments?recipeId=${recipeId}`);
+                if (response.ok) {
+                    comments.value = await response.json();
+                } else {
+                    comments.value = [];
+                }
+            } catch (e) {
+                console.error("Failed to fetch comments", e);
+                comments.value = [];
+            }
+        };
+
+        const postComment = async () => {
+            if (!newCommentText.value.trim()) return;
+            if (!selectedRecipe.value) return;
+
+            isSubmittingComment.value = true;
+            try {
+                const response = await fetch('/api/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recipeId: selectedRecipe.value.id,
+                        content: newCommentText.value,
+                        user: '美食爱好者', 
+                        avatar_color: `hsl(${Math.random() * 360}, 70%, 50%)`
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    comments.value.unshift(result.comment);
+                    newCommentText.value = '';
+                }
+            } catch (e) {
+                console.error("Failed to post comment", e);
+                alert("评论发布失败，请稍后重试");
+            } finally {
+                isSubmittingComment.value = false;
+            }
+        };
+
         const viewRecipe = (recipe) => {
             selectedRecipe.value = recipe;
             currentView.value = 'recipe-detail';
+            comments.value = [];
+            fetchComments(recipe.id);
             nextTick(() => {
                 window.scrollTo(0, 0);
                 animateRecipeDetail();
+            });
+        };
+
+        const viewCreative = (item) => {
+            currentView.value = item.id; // 'illustration' or 'game'
+            nextTick(() => {
+                window.scrollTo(0, 0);
+                if (item.id === 'game') {
+                    initGame('game-container');
+                } else if (item.id === 'illustration') {
+                    initIllustration('illustration-container');
+                }
             });
         };
 
@@ -111,7 +174,12 @@ const app = createApp({
             toggleFavorite,
             isFavorite,
             viewRecipe,
-            goHome
+            viewCreative,
+            goHome,
+            comments,
+            newCommentText,
+            postComment,
+            isSubmittingComment
         };
     }
 });

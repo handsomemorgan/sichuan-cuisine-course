@@ -178,7 +178,9 @@
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div v-for="item in creativeContent" :key="item.id" class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer">
+                            <div v-for="item in creativeContent" :key="item.id" 
+                                 class="relative group overflow-hidden rounded-2xl h-64 cursor-pointer"
+                                 @click="viewCreative(item)">
                                 <img :src="item.image" :alt="item.title" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-70 group-hover:opacity-100">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
                                     <span class="text-xs font-bold text-chuan-red bg-white/10 backdrop-blur w-fit px-2 py-1 rounded mb-2">{{ item.type === 'game' ? '互动游戏' : '创意插画' }}</span>
@@ -189,6 +191,30 @@
                         </div>
                     </div>
                 </section>
+            </div>
+
+            <!-- ILLUSTRATION VIEW -->
+            <div v-if="currentView === 'illustration'" class="bg-paper min-h-screen pt-10 pb-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <button @click="goHome" class="mb-8 text-chuan-dark hover:text-chuan-red flex items-center gap-2 group">
+                        <span class="bg-gray-200 p-2 rounded-full group-hover:bg-chuan-red group-hover:text-white transition">&larr;</span> 返回首页
+                    </button>
+                    <div id="illustration-container"></div>
+                </div>
+            </div>
+
+            <!-- GAME VIEW -->
+            <div v-if="currentView === 'game'" class="bg-chuan-dark min-h-screen pt-10 pb-20 text-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <button @click="goHome" class="mb-8 text-white hover:text-chuan-gold flex items-center gap-2 group">
+                        <span class="bg-white/20 p-2 rounded-full group-hover:bg-chuan-gold group-hover:text-chuan-dark transition">&larr;</span> 返回首页
+                    </button>
+                    <div class="flex flex-col items-center">
+                        <h2 class="text-4xl font-calligraphy text-chuan-gold mb-4">辣椒大冒险</h2>
+                        <p class="text-gray-400 mb-8">WASD 移动，鼠标左键射击。保护火锅底料，消灭牛奶怪！</p>
+                        <div id="game-container" class="relative"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- RECIPE DETAIL VIEW -->
@@ -267,22 +293,43 @@
                                 <!-- Interactive Section -->
                                 <div class="mt-16 pt-10 border-t border-gray-200">
                                     <h3 class="text-2xl font-serif font-bold mb-6">厨友评论</h3>
-                                    <div class="bg-gray-50 p-6 rounded-xl mb-6">
-                                        <textarea placeholder="分享你的烹饪心得..." class="w-full bg-white border border-gray-200 rounded-lg p-4 focus:outline-none focus:border-chuan-red transition resize-none h-24"></textarea>
-                                        <div class="mt-2 flex justify-end">
-                                            <button class="bg-chuan-red text-white px-6 py-2 rounded-lg hover:bg-chuan-red-light transition">发布评论</button>
+                                    
+                                    <!-- Comment Input -->
+                                    <div class="bg-gray-50 p-6 rounded-xl mb-8">
+                                        <textarea 
+                                            v-model="newCommentText"
+                                            placeholder="分享你的烹饪心得..." 
+                                            class="w-full bg-white border border-gray-200 rounded-lg p-4 focus:outline-none focus:border-chuan-red transition resize-none h-24 mb-2"
+                                        ></textarea>
+                                        <div class="flex justify-end">
+                                            <button 
+                                                @click="postComment" 
+                                                :disabled="isSubmittingComment || !newCommentText.trim()"
+                                                class="bg-chuan-red text-white px-6 py-2 rounded-lg hover:bg-chuan-red-light transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                {{ isSubmittingComment ? '发布中...' : '发布评论' }}
+                                            </button>
                                         </div>
                                     </div>
-                                    <!-- Mock Comments -->
+
+                                    <!-- Comment List -->
                                     <div class="space-y-6">
-                                        <div class="flex gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-gray-300"></div>
+                                        <div v-if="comments.length === 0" class="text-center text-gray-400 py-8">
+                                            暂无评论，快来抢沙发吧！
+                                        </div>
+                                        <div v-for="(comment, idx) in comments" :key="idx" class="flex gap-4 border-b border-gray-100 pb-6 last:border-0 animate-fade-in">
+                                            <div 
+                                                class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                                                :style="{ backgroundColor: comment.avatar_color || '#ccc' }"
+                                            >
+                                                {{ comment.user.charAt(0) }}
+                                            </div>
                                             <div>
-                                                <div class="flex items-center gap-2">
-                                                    <span class="font-bold text-sm">辣妹子</span>
-                                                    <span class="text-xs text-gray-400">2小时前</span>
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <span class="font-bold text-sm text-gray-800">{{ comment.user }}</span>
+                                                    <span class="text-xs text-gray-400">{{ comment.time }}</span>
                                                 </div>
-                                                <p class="text-gray-600 text-sm mt-1">按照这个方子做了一次，刀口辣椒真的是灵魂！太香了！</p>
+                                                <p class="text-gray-600 text-sm leading-relaxed">{{ comment.content }}</p>
                                             </div>
                                         </div>
                                     </div>
