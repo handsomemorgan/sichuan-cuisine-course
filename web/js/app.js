@@ -1,6 +1,6 @@
 import { createApp, ref, computed, onMounted, nextTick } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 import { recipes, creativeContent } from './data.js?v=2';
-import { initGame } from './game.js?v=2';
+import { initGame } from './game.js?v=4';
 import { initIllustration } from './illustration.js?v=2';
 
 const app = createApp({
@@ -12,6 +12,7 @@ const app = createApp({
         const comments = ref([]);
         const newCommentText = ref('');
         const isSubmittingComment = ref(false);
+        let gameInstance = null;
 
         // Load favorites from local storage
         onMounted(() => {
@@ -107,11 +108,17 @@ const app = createApp({
         };
 
         const viewCreative = (item) => {
+            // Cleanup previous game instance if exists
+            if (gameInstance) {
+                gameInstance.stop();
+                gameInstance = null;
+            }
+
             currentView.value = item.id; // 'illustration' or 'game'
             nextTick(() => {
                 window.scrollTo(0, 0);
                 if (item.id === 'game') {
-                    initGame('game-container');
+                    gameInstance = initGame('game-container');
                 } else if (item.id === 'illustration') {
                     initIllustration('illustration-container');
                 }
@@ -119,6 +126,10 @@ const app = createApp({
         };
 
         const goHome = () => {
+            if (gameInstance) {
+                gameInstance.stop();
+                gameInstance = null;
+            }
             currentView.value = 'home';
             selectedRecipe.value = null;
             nextTick(() => {

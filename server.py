@@ -5,7 +5,7 @@ import os
 import urllib.parse
 from datetime import datetime
 
-PORT = 8006
+PORT = 8007
 COMMENTS_FILE = 'comments.json'
 
 # Initialize comments file if not exists
@@ -98,14 +98,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
 
         return super().do_POST()
 
-print(f"Starting server on port {PORT}...")
-print(f"Open http://localhost:{PORT}/web/ in your browser")
-
-# Allow reuse of address to avoid 'Address already in use' errors
-socketserver.TCPServer.allow_reuse_address = True
-
-with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
-    try:
+if __name__ == "__main__":
+    with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
+        print(f"Serving at port {PORT}")
         httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
